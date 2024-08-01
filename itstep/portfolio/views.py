@@ -18,9 +18,13 @@ def hello(request):
 
 
 def about_me(request):
-    context = "About: info"
+    return render(request, "portfolio/about.html")
+
+def my_skill(request, id=None):
+    context = f"skill: id={id}"
+    return render(request, "portfolio/skills.html")
     return HttpResponse(context)
 
-def my_skill(request, id):
-    context = f"skill: id={id}"
-    return HttpResponse(context)
+
+def home_view(request):
+    return render(request, "index.html")
