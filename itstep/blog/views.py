@@ -5,7 +5,13 @@ from .models import Post
 
 
 def post_list(request):
-    posts = Post.published.all()
+    # HttpRequest object contains metadata about a request. Like filter items based on a GET parameter.
+
+    q = request.GET.get('q', None)
+    if q is None or q is "":
+        posts = Post.published.all()
+    elif q is not None:
+        posts = Post.objects.filter(title__contains=q)
 
     # render returns an HttpResponse object with the rendered text
     return render(request, 'blog/post/list.html', {'posts': posts})

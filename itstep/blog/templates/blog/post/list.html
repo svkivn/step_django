@@ -4,6 +4,15 @@
 {% block content %}
 <h1>My Blog</h1>
 
+<nav>
+<form action="/blog" method="get" class="form-inline mt-2 mt-md-0">
+<input id="q" name="q" value="{{ request.GET.q }}" \
+class="form-control mr-sm-2" type="text" placeholder="Search..." aria-label="Search">
+<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+</nav>
+
+
 {% for post in posts %}
     <h2>
         <a href="{{ post.get_absolute_url }}">
