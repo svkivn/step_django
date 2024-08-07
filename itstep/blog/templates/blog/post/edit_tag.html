@@ -1,0 +1,66 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<h1>My Blog - tags ({{ tags |length }})</h1>  <!--tags.count-->
+
+
+<div class="container" style="background-color: black; color: white;">
+    <div class="col text-center" >
+<!--        I'm centered-->
+
+            {% if form.instance.pk %}
+            Edit Record
+            {% else %}
+            New Record
+            {% endif %}
+    </div>
+</div>
+
+
+{% for message in messages %}
+<div class="alert alert-{% if message.level_tag == 'error' %}danger{% else %}{{ message.level_tag }}{% endif %}"
+     role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+
+<div class="pb-3">
+    <form class="row justify-content-start" method="post" action="">  <!-- action="{% url 'blog:create-tag' %}" -->
+        {% csrf_token %}
+        <div class="col-auto align-self-end">
+            {{ form }}
+        </div>
+        <div class="col-auto align-self-end">
+            <button class="btn btn-secondary" type="submit">ADD</button>
+        </div>
+    </form>
+</div>
+
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="col-md-1">No</th>
+            <th class="col-md-3">name</th>
+            <th class="col-md-4">slug</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tag in tags%}
+        <tr>
+            <td>{{ tag.id }}.</td>
+            <td><a href="{% url 'blog:post-tags' tag.slug %}" class="card-link"> {{ tag.name }}</a></td>
+            <td>{{ tag.slug }}</td>
+            <td>
+                <a href="{% url 'blog:edit-tag' pk=tag.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'blog:delete-tag' pk=tag.pk %}" class="btn btn-danger btn-sm">Del</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+
+{% endblock %}

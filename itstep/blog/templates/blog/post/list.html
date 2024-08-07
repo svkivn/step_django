@@ -16,13 +16,13 @@ class="form-control mr-sm-2" type="text" placeholder="Search..." aria-label="Sea
 {% for post in posts %}
     <h2>
         <a href="{{ post.get_absolute_url }}">
-            {{ post.title }}
+            {{ post.title | title }}
         </a>
     </h2>
 
 
     <p class="date">
-        Published {{ post.publish }} by {{ post.author }}
+        Published - {{ post.publish }} by {{ post.author }}, status - {{post.status}}
     </p>
     {{ post.body|truncatewords:30|linebreaks }}
 {% endfor %}

@@ -72,7 +72,7 @@ class Comment(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=31, unique=True)
+    name = models.CharField(max_length=31, unique=True, help_text='A label for name tag.')
     slug = models.SlugField(max_length=31, unique=True, help_text='A label for URL config.')
 
     def __str__(self):
@@ -82,8 +82,9 @@ class Tag(models.Model):
         verbose_name = 'tags for posts'
 
     def save(self, *args, **kwargs):
+        print("save to db")
         self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
+        super(Tag, self).save(*args, **kwargs)
 
 
 class Category(models.Model):
