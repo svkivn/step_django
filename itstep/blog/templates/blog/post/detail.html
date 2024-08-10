@@ -1,7 +1,16 @@
 {% extends "blog/base.html" %}
 {% block title %}{{ post.title }}{% endblock %}
 
+
+
+
+
+
 {% block content %}
+    <div class="blog-grid-img position-relative">
+        <img alt="img" src="{{ post.image.url }}">
+    </div>
+
     <h1>{{ post.title }}</h1>
     <h6>
     {% for tag in post.tags.all %}
