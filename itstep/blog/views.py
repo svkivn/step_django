@@ -6,7 +6,6 @@ from django.contrib import messages
 
 from .models import Post, Tag
 
-
 def post_list(request):
     # HttpRequest object contains metadata about a request. Like filter items based on a GET parameter.
 

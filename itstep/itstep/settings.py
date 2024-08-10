@@ -118,11 +118,28 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+# визначає URL, за яким будуть доступні статичні файли. Важливо, що це не фізичний шлях на сервері, а URL-адреса,
+# за якою клієнти (браузери) будуть звертатися до статичних файлів
+STATIC_URL = "/static/"
 
-#STATICFILES_DIRS = [BASE_DIR / "static"]
+# Додаткові директорії до статичних директорій app, в яких Django буде шукати статичні файли.
+# Наприклад, якщо є app blog, і у нього є директорія blog/static/, то статичні файли з цієї директорії будуть доступні.
+# Можуть використовувати кілька додатків.
+# При розробці Django обслуговує файли безпосередньо з директорій, вказаних у STATICFILES_DIRS.
+# Порядок завантаження файлів визначається пошуком у додатках і директоріях, вказаних у STATICFILES_DIRS по порядку визначення.
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# Директорія, куди будуть збиратися статичні файли після виконання collectstatic (використовується на продакшні)
+# Всі статичні файли збираються в одному місці для ефективного обслуговування
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+# URL для доступу до медіафайлів
+MEDIA_URL = '/media/'
+
+# Директорія на сервері, де будуть зберігатися медіафайли
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

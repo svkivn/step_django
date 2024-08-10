@@ -19,13 +19,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", include("portfolio.urls")),
+urlpatterns = [path("admin/", admin.site.urls), path("", include("portfolio.urls")),
     path('blog/', include('blog.urls', namespace='blog')),
 
 ]
 
+# при розробці можна не вказувати, оскільки має вбудований сервер розробки
+# автоматично обслуговує статичні файли за умови, що DEBUG = True
+# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-
-#urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# Додає URL-адреси для медіафайлів під час розробки
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

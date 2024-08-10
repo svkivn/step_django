@@ -39,6 +39,7 @@ class Post(models.Model):
     tags = models.ManyToManyField("Tag", related_name='blog_posts')
 
     # category = models.ForeignKey("Category", on_delete=models.PROTECT, null=True)
+    # image = models.ImageField(upload_to='post/images/')
 
     class Meta:
         ordering = ['-publish']
