@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "portfolio",
     'blog.apps.BlogConfig',
     'django_extensions',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -57,8 +58,8 @@ ROOT_URLCONF = "itstep.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "itstep/templates")],
-        "APP_DIRS": True,
+        "DIRS": [os.path.join(BASE_DIR, "itstep/templates")],       # Додаткові директорії
+        "APP_DIRS": True,                                           # Вказує Django автоматично шукати шаблони в папках app
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",

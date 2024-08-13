@@ -7,11 +7,13 @@
 
 
 {% block content %}
-    <div class="blog-grid-img position-relative">
-        <img alt="img" src="{{ post.image.url }}">
-    </div>
 
     <h1>{{ post.title }}</h1>
+
+    <div class="blog-grid-img position-relative">
+        <img alt="img" height="240px" src="{{ post.image.url }}">
+    </div>
+
     <h6>
     {% for tag in post.tags.all %}
     <a href="{% url 'blog:post-tags' tag.slug %}" class="card-link">{{ tag }}</a>
@@ -22,6 +24,7 @@
     <p class="date">
         Published {{ post.publish }} by {{ post.author }}
     </p>
+
     {{ post.body|linebreaks }}
 
 <p>
