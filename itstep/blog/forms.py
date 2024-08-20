@@ -47,7 +47,8 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'body', 'status', 'tags', 'category', 'image', "publish"]
-        widgets = {'body': forms.Textarea(attrs={'rows': 5, 'cols': 40}),
+        widgets = {
+            'body': forms.Textarea(attrs={'rows': 5, 'cols': 40}),
             'image': forms.ClearableFileInput(attrs={'multiple': False}),
             'publish': forms.DateTimeInput(attrs={'type': 'datetime-local'})}
 
