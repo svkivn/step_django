@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} + {{ post.title }}{% endblock %}
+
+{% block content %}
+<h1>Додати новий пост</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form | crispy }}  <!-- Відображення форми -->
+        <button type="submit">Зберегти пост</button>
+    </form>
+    <a href="{% url 'blog:post_list' %}">Назад до списку постів</a>
+{% endblock %}
