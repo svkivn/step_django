@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comment, Tag
+from .models import Comment, Tag, Post
 from django.core.exceptions import ValidationError
 
 
@@ -43,4 +43,27 @@ class TagForm(forms.ModelForm):
         if len(cleaned_data.get("name")) < 3:
             self.add_error(None, "The total number of chars  must be 3 or greate.")
 
+
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'body', 'status', 'tags', 'category', 'image']
+        widgets = {
+            'body': forms.Textarea(attrs={'rows': 5, 'cols': 40}),
+            'image': forms.ClearableFileInput(attrs={'multiple': False}),
+        }
+
+    def clean_tags(self):
+        tags = self.cleaned_data.get('tags')
+
+        if not tags:
+            raise forms.ValidationError("Будь ласка, виберіть принаймні один тег.")
+
+        # Додаткові перевірки, якщо потрібно
+        if len(tags) > 5:  # Наприклад, обмежити до 5 тегів
+            raise forms.ValidationError("Можна вибрати не більше 5 тегів.")
+
+        return tags
 

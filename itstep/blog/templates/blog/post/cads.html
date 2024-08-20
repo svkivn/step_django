@@ -3,14 +3,12 @@
 
             <h1>Posts</h1>
 
-
-
                 <div class="row mt-n5">
                     {%for post in posts%}
                         <div class="col-md-6 col-lg-4 mt-5 wow fadeInUp" data-wow-delay=".2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
                         <div class="blog-grid">
                             <div class="blog-grid-img position-relative">
-                                <img height="480px" width="480px" alt="img" src="{{post.image.url}}">
+                                <img height="240px"   alt="img" src="{{post.image.url}}">
                             </div>
                             <div class="blog-grid-text p-4">
                                 <h3 class="h5 mb-3"><a href="{{ post.get_absolute_url }}">{{post.title | title}}}</a></h3>

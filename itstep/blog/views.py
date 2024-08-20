@@ -8,6 +8,7 @@ from django.contrib import messages
 from .models import Post, Tag
 from django.db.models import F
 
+
 def post_list_cards(request):
     posts = Post.published.all()
     posts = Post.objects.annotate(num_comments=Count('comments'))
@@ -30,20 +31,20 @@ def post_list(request):
 
 
 def post_detail(request, id):
-    #post = get_object_or_404(Post, id=id, status=Post.Status.PUBLISHED)
+    # post = get_object_or_404(Post, id=id, status=Post.Status.PUBLISHED)
     # List of active comments for this post
     # comments = post.comments.filter(active=True)
 
     # updated query 1
     # Завантажуємо пост разом із коментарями заздалегідь
-    post = get_object_or_404(Post.objects.select_related("author", "category").prefetch_related('comments', "tags"), id=id)
+    post = get_object_or_404(Post.objects.select_related("author", "category").prefetch_related('comments', "tags"),
+                             id=id)
     # Оскільки коментарі вже завантажені, немає потреби виконувати додатковий запит
     comments = post.comments.all()
 
     # updated query 2
     # active_comments = Prefetch('comments', queryset=Comment.objects.filter(active=True))
     # post = get_object_or_404(Post.objects.prefetch_related(active_comments), id=id)
-
 
     # Form for users to comment
     form = CommentForm()
@@ -58,7 +59,7 @@ def post_detail(request, id):
 #     return render(request, 'blog/post/detail.html', {'post':post})
 
 
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, PostForm
 
 
 def post_share(request, post_id):
@@ -156,7 +157,6 @@ def delete_tag(request, pk=None):
     return redirect("blog:create-tag")
 
 
-
 from . import forms
 
 
@@ -187,6 +187,7 @@ def manage_tag(request, pk=None):
     tags = Tag.objects.all()
     return render(request, 'blog/post/edit_tag.html', {'form': form, 'tags': tags})
 
+
 #
 # def manage_tag(request, pk=None):
 #     if pk:
@@ -216,6 +217,38 @@ def manage_tag(request, pk=None):
 #     return render(request, 'blog/post/edit_tag.html', {'form': form, 'tags': tags})
 
 
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)  # Не забувайте про request.FILES для завантаження файлів
+        if form.is_valid():
+            post = form.save(commit=False)  # Не зберігайте ще в базі даних
+            post.author = request.user  # Встановлюємо автора поста
+            post.save()  # Тепер зберігаємо пост
+            form.save_m2m()  # Зберігаємо ManyToMany поля, якщо є
+            return redirect('blog:post_detail', post.id)  # Перенаправлення на деталі поста
+    else:
+        form = PostForm()
+    return render(request, 'blog/post/create_post.html', {'form': form})
 
 
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            # post.author = request.user  # Встановлюємо автора поста
+            post.save()
+            form.save_m2m()
+            return redirect('blog:post_detail', post.id)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'blog/post/create_post.html', {'form': form, 'post': post})
 
+
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('blog:post_list')  # Перенаправлення на список постів
+    return render(request, 'post_detail.html', {'post': post})

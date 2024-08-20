@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "crispy_forms",
+    "crispy_bootstrap4",
     "debug_toolbar",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -72,6 +74,11 @@ TEMPLATES = [
         },
     },
 ]
+
+
+# https://stackoverflow.com/questions/75495403/django-returns-templatedoesnotexist-when-using-crispy-forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 WSGI_APPLICATION = "itstep.wsgi.application"
 
