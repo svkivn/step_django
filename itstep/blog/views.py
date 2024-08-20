@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
@@ -5,6 +6,15 @@ from django.urls import reverse
 from django.contrib import messages
 
 from .models import Post, Tag
+from django.db.models import F
+
+def post_list_cards(request):
+    posts = Post.published.all()
+    posts = Post.objects.annotate(num_comments=Count('comments'))
+    # posts = Post.objects.values('title', 'body', 'publish', category_rename=F('category__title'))
+    # posts = Post.objects.annotate(num_comments=Count('comments')).select_related("category__title")
+    return render(request, 'blog/post/index.html', {'posts': posts})
+
 
 def post_list(request):
     # HttpRequest object contains metadata about a request. Like filter items based on a GET parameter.
@@ -20,9 +30,21 @@ def post_list(request):
 
 
 def post_detail(request, id):
-    post = get_object_or_404(Post, id=id, status=Post.Status.PUBLISHED)
+    #post = get_object_or_404(Post, id=id, status=Post.Status.PUBLISHED)
     # List of active comments for this post
-    comments = post.comments.filter(active=True)
+    # comments = post.comments.filter(active=True)
+
+    # updated query 1
+    # Завантажуємо пост разом із коментарями заздалегідь
+    post = get_object_or_404(Post.objects.select_related("author", "category").prefetch_related('comments', "tags"), id=id)
+    # Оскільки коментарі вже завантажені, немає потреби виконувати додатковий запит
+    comments = post.comments.all()
+
+    # updated query 2
+    # active_comments = Prefetch('comments', queryset=Comment.objects.filter(active=True))
+    # post = get_object_or_404(Post.objects.prefetch_related(active_comments), id=id)
+
+
     # Form for users to comment
     form = CommentForm()
     return render(request, 'blog/post/detail.html', {'post': post, 'comments': comments, 'form': form})
@@ -192,3 +214,8 @@ def manage_tag(request, pk=None):
 #
 #     tags = Tag.objects.all()
 #     return render(request, 'blog/post/edit_tag.html', {'form': form, 'tags': tags})
+
+
+
+
+

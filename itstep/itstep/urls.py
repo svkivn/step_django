@@ -18,6 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -25,7 +26,10 @@ urlpatterns = [
     path('blog/', include('blog.urls', namespace='blog')),
     path('accounts/', include('accounts.urls', namespace='user-account')),
 
-]
+] + debug_toolbar_urls()
+
+
+
 
 # при розробці можна не вказувати, оскільки має вбудований сервер розробки
 # автоматично обслуговує статичні файли за умови, що DEBUG = True
