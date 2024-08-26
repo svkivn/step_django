@@ -4,7 +4,7 @@ from ..models import Post
 register = template.Library()
 
 
-@register.simple_tag(name='total_posts')
+@register.simple_tag(name='count_posts')
 def total_posts():
     return Post.published.count()
 

@@ -1,5 +1,6 @@
 <!-- https://colorlib.com/wp/bootstrap-sidebar/ -->
 
+{% load blog_tags %}
 <nav id="sidebar" >
 
     <div class="p-2">
@@ -33,5 +34,12 @@
                 </div>
             </form>
         </div>
+
+
+        <p>
+            This is my blog.
+            I've written {% count_posts %} posts so far.
+        </p>
+
     </div>
 </nav>
