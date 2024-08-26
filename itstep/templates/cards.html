@@ -1,0 +1,37 @@
+<div class="container">
+                <div class="row mt-n5">
+                    {% for post in posts%}
+                    <div class="col-md-6 col-lg-4 mt-5 wow fadeInUp" data-wow-delay=".2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                        <div class="blog-grid">
+                            <div class="blog-grid-img position-relative"><img alt="img" src="https://www.bootdey.com/image/480x480/00FFFF/000000"></div>
+                            <div class="blog-grid-text p-4">
+                                <h3 class="h5 mb-3"><a href="{{ post.get_absolute_url }}">{{ post.title | title }}</a></h3>
+                                <h3 class="h6 mb-3"><a href="#!">Сategory - {{ post.category.title }}</a></h3>
+                                <p class="display-30"> {{ post.body | truncatewords:30 | linebreaks }}</p>
+                                <div class="meta meta-style2">
+                                    <ul>
+                                        <li><a href="#!"><i class="fas fa-calendar-alt"></i> {{post.publish|date:"D d/M/Y f"}}</a></li>
+                                        <li><a href="#!"><i class="fas fa-user"></i> User</a></li>
+                                        <li><a href="#!"><i class="fas fa-comments"></i> 38</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="row mt-6 wow fadeInUp" data-wow-delay=".6s" style="visibility: visible; animation-delay: 0.6s; animation-name: fadeInUp;">
+                    <div class="col-12">
+                        <div class="pagination text-small text-uppercase text-extra-dark-gray">
+                            <ul>
+                                <li><a href="#!"><i class="fas fa-long-arrow-alt-left me-1 d-none d-sm-inline-block"></i> Prev</a></li>
+                                <li class="active"><a href="#!">1</a></li>
+                                <li><a href="#!">2</a></li>
+                                <li><a href="#!">3</a></li>
+                                <li><a href="#!">Next <i class="fas fa-long-arrow-alt-right ms-1 d-none d-sm-inline-block"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>

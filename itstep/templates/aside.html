@@ -1,0 +1,38 @@
+<!-- https://colorlib.com/wp/bootstrap-sidebar/ -->
+
+<nav id="sidebar" >
+
+    <div class="p-2">
+        <ul class="list-unstyled components mb-5">
+            <li class="active">
+                <a href="#"><span class="fa fa-home mr-3"></span> Home</a>
+            </li>
+            <li>
+                <a href="#"><span class="fa fa-user mr-3"></span> User</a>
+            </li>
+            <li>
+                <a href="#"><span class="fa fa-plus  mr-3"></span> Add Post</a>
+            </li>
+            <li>
+                <a href="{% url 'blog:post-list'%}"><span class="fa fa-sticky-note mr-3"></span> Blog</a>
+            </li>
+            <li>
+                <a href="#"><span class="fa fa-suitcase mr-3"></span> Tags</a>
+            </li>
+            <li>
+                <a href="{% url 'blog:post-list-cards' %}"><span class="fa fa-cogs mr-3"></span> Services</a>
+            </li>
+
+        </ul>
+
+        <div class="mb-5">
+            <h3 class="h6 mb-3">Subscribe for newsletter</h3>
+            <form action="#" class="subscribe-form">
+                <div class="form-group d-flex">
+                    <div class="icon"><span class="icon-paper-plane"></span></div>
+                    <input type="text" class="form-control" placeholder="Enter Email Address">
+                </div>
+            </form>
+        </div>
+    </div>
+</nav>
