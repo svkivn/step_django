@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>Додати новий пост</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         {{ form | crispy }}  <!-- Відображення форми -->
         <button type="submit">Зберегти пост</button>

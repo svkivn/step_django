@@ -225,7 +225,10 @@ def create_post(request):
             post.author = request.user  # Встановлюємо автора поста
             post.save()  # Тепер зберігаємо пост
             form.save_m2m()  # Зберігаємо ManyToMany поля, якщо є
-            return redirect('blog:post_detail', post.id)  # Перенаправлення на деталі поста
+            messages.success(request, f'Post "{post.title}" was created.')
+            return redirect('blog:post_detail', post.id)  # Перенаправлення на деталі поста  #
+        else:
+            messages.error(request, 'Please correct the error below.')
     else:
         form = PostForm()
     return render(request, 'blog/post/create_post.html', {'form': form})
@@ -240,7 +243,10 @@ def edit_post(request, post_id):
             # post.author = request.user  # Встановлюємо автора поста
             post.save()
             form.save_m2m()
+            messages.success(request, f'Post "{post.title}" was updated.')
             return redirect('blog:post_detail', post.id)
+        else:
+            messages.error(request, 'Please correct the error below.')
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post/create_post.html', {'form': form, 'post': post})
@@ -250,5 +256,6 @@ def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
         post.delete()
+        messages.success(request, f'Post "{post.title}" was deleted.')
         return redirect('blog:post_list')  # Перенаправлення на список постів
     return render(request, 'post_detail.html', {'post': post})
