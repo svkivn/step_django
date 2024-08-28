@@ -13,15 +13,19 @@ class TagForm(forms.Form):
         return instance
 
 
-# class RatingForm(forms.Form):
-#     score = forms.IntegerField(min_value=1, max_value=5, widget=forms.HiddenInput())
+
 
 
 class RatingForm(forms.Form):
-    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]  # Вибір з 1 до 5
-    score = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.Select, label="Score")
+    RATING_CHOICES = [(i, str(i) ) for i in range(5, 0, -1)]  # Вибір з 5 до 1
+    score = forms.ChoiceField(choices=RATING_CHOICES,
+                              widget=forms.RadioSelect(attrs={'class': 'radio_1'}),
+                              label="Score", )
 
-#
+
+# class RatingForm(forms.Form):
+#     score = forms.IntegerField(min_value=1, max_value=5, widget=forms.HiddenInput())
+
 # class ContactForm(forms.Form):
 #     name = forms.CharField(max_length=100, required=True, label='Ваше ім\'я')
 #     email = forms.EmailField(required=True, label='Ваша електронна пошта')

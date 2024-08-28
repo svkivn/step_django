@@ -84,24 +84,27 @@ def post_detail(request, id):
     current_rating = post.ratings.aggregate(Avg('score'))['score__avg'] or 0
     current_rating = int(round(current_rating))  # Округлюємо до найближчого цілого числа
 
-    return render(request, 'blog/post/detail.html', {'post': post, 'current_rating': current_rating})
+    return render(request, 'blog/post/detail.html', {'post': post, 'current_rating': current_rating, "form": RatingForm()})
 
 
 def rate_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
-        score = request.POST.get('score')
-        print(f"{score=}")
-        # Перевірка, чи користувач вже оцінив цей пост
-        rating, created = Rating.objects.get_or_create(post=post, defaults={'score': score})
-        if not created:
-            rating.score = score  # Оновлення оцінки
-            try:
-                # rating.full_clean() # Це викличе всі валідатори, включаючи MinValueValidator та MaxValueValidator
-                rating.save()
-                messages.success(request, f"Rating for {post.title}  with score={rating.score} was update")
-            except ValidationError as e:
-                messages.success(request, e)  # Це дозволить вам побачити, чи є помилки валідації
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            score = form.cleaned_data['score']  # Доступ до значення поля 'score'
+            print(form.cleaned_data)
+            rating, created = Rating.objects.update_or_create(post=post, defaults={'score': score})
+            mess_value = "create" if created else "update"
+            messages.success(request, f"Rating for {post.title}  with score={rating.score} was {mess_value}")
+            return redirect(reverse('blog:post-detail',  kwargs={'id': post_id}))
+        else:
+            messages.success(request, form.errors)
+    else:
+        form = RatingForm()
+    return render(request, 'blog/post/detail.html', {'post': post, "form": form})
 
-        return redirect(reverse('blog:post-detail', kwargs={'id': post_id}))
-    return render(request, 'blog/post/detail.html', {'post': post})
+
+
+        # return redirect(reverse('blog:post-detail', kwargs={'id': post_id}))
+

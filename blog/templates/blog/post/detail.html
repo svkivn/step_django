@@ -13,21 +13,36 @@
 
 Scores = {{ post.ratings.all | join:", " }}
 
+<!--<form id="rating-form" method="post"-->
+<!--      action="{% url 'blog:rate-post' post_id=post.pk %}">-->
+<!--        {% csrf_token %}-->
+<!--        <div class="star-rating">-->
+<!--            {% for i in "54321" %}-->
+<!--                <input type="radio" name="score" id="rating-{{ i }}" value="{{ i }}"-->
+<!--                   {% if i == current_rating|stringformat:"s" %} checked {% endif %}-->
+<!--            onchange="submitRating()">-->
+
+<!--                <label for="rating-{{ i }}" class="fa fa-star"></label>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+<!--&lt;!&ndash;        <button type="submit">Submit Rating</button>&ndash;&gt;-->
+<!--    </form>-->
+
+
 <form id="rating-form" method="post"
       action="{% url 'blog:rate-post' post_id=post.pk %}">
         {% csrf_token %}
-        <div class="star-rating">
-            {% for i in "54321" %}
-                <input type="radio" name="score" id="rating-{{ i }}" value="{{ i }}"
-                   {% if i == current_rating|stringformat:"s" %} checked {% endif %}
-            onchange="submitRating()">
-
-                <label for="rating-{{ i }}" class="fa fa-star"></label>
-            {% endfor %}
-        </div>
+    <div class="star-rating">
+          {% for radio in form.score %}
+            <!-- {{ radio.tag }}  {{ radio.choice_label }}-->
+            <input type="radio" name="{{form.score.name}}" id="{{ radio.id_for_label }}" value="{{  radio.choice_label }}"
+                   {% if  radio.choice_label == current_rating|stringformat:"s" %} checked {% endif %}
+             onchange="submitRating()">
+            <label class="fa fa-star" for="{{ radio.id_for_label }}"></label>
+        {% endfor %}
+    </div>
 <!--        <button type="submit">Submit Rating</button>-->
     </form>
-
 
 {% endblock %}
 
@@ -62,4 +77,3 @@ Scores = {{ post.ratings.all | join:", " }}
         }
     </script>
 {% endblock %}
-
