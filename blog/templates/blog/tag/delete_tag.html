@@ -1,0 +1,16 @@
+<!-- delete_tag.html -->
+{% extends "base.html" %}
+{% block title %} Delete tag {% endblock %}
+
+{% block content %}
+    <h1>Видалити тег: {{ tag.name }}</h1>
+    <p>Ви впевнені, що хочете видалити цей тег?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Так, видалити</button>
+    </form>
+    <a href="{% url 'blog:create-tag' %}">Ні, повернутися до списку тегів</a>
+
+
+{% endblock %}
+

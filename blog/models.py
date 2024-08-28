@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -22,12 +23,9 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    status = models.CharField(max_length=2,
-                              choices=Status.choices,
-                              default=Status.DRAFT)
+    status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT)
 
-    category = models.ForeignKey("Category", on_delete=models.CASCADE, null=True,
-                                 related_name="posts")
+    category = models.ForeignKey("Category", on_delete=models.CASCADE, null=True, related_name="posts")
 
     tags = models.ManyToManyField("Tag", related_name='blog_posts')
 
@@ -63,7 +61,22 @@ class Tag(models.Model):
     class Meta:
         verbose_name = 'Tags for posts'
 
-    def save(self, *args, **kwargs):
-        print("save to db")
-        self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     print("save to db")
+    #     self.slug = slugify(self.name)
+    #     super().save(*args, **kwargs)
+
+
+
+class Rating(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='ratings')
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    score = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # class Meta:
+    #     unique_together = ('post', 'user')  # Унікальність оцінки для кожного користувача для кожного поста
+
+    def __str__(self):
+        return f'{self.score} stars'
+        return f'{self.user} rated {self.post} with {self.score} stars'

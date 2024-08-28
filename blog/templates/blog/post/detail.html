@@ -10,4 +10,56 @@
         Published {{ post.publish }}
     </p>
     {{ post.body|linebreaks }}
+
+Scores = {{ post.ratings.all | join:", " }}
+
+<form id="rating-form" method="post"
+      action="{% url 'blog:rate-post' post_id=post.pk %}">
+        {% csrf_token %}
+        <div class="star-rating">
+            {% for i in "54321" %}
+                <input type="radio" name="score" id="rating-{{ i }}" value="{{ i }}"
+                   {% if i == current_rating|stringformat:"s" %} checked {% endif %}
+            onchange="submitRating()">
+
+                <label for="rating-{{ i }}" class="fa fa-star"></label>
+            {% endfor %}
+        </div>
+<!--        <button type="submit">Submit Rating</button>-->
+    </form>
+
+
 {% endblock %}
+
+
+
+{% block style %}
+    <style>
+        .star-rating {
+            direction: rtl;
+            display: inline-block;
+        }
+        .star-rating input {
+            display: none;
+        }
+        .star-rating label {
+            font-size: 2em;
+            color: gray;
+            cursor: pointer;
+        }
+        .star-rating input:checked ~ label {
+            color: gold;
+        }
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: gold;
+    </style>
+
+    <script>
+        // Додаємо подію змінити для всіх елементів input типу radio
+        function submitRating() {
+            document.getElementById('rating-form').submit();
+        }
+    </script>
+{% endblock %}
+

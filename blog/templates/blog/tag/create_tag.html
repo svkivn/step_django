@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %} Add tag {% endblock %}
+
+{% block content %}
+
+<form action="" method="post" novalidate>
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Add</button>
+
+</form>
+
+##################
+
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="col-md-1">No</th>
+            <th class="col-md-3">name</th>
+            <th class="col-md-4">slug</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tag in tags%}
+        <tr>
+            <td>{{ tag.id }}.</td>
+            <td><a href="#" class="card-link"> {{ tag.name }}</a></td>
+            <td>{{ tag.slug }}</td>
+            <td>
+                <a href="{% url 'blog:edit-tag' pk=tag.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'blog:delete-tag' pk=tag.pk %}" class="btn btn-danger btn-sm">Del</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td>There are currently no Tags available.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+
+
+{% endblock %}

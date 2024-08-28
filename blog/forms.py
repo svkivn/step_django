@@ -1,4 +1,26 @@
-# from django import forms
+from django import forms
+
+
+class TagForm(forms.Form):
+    name = forms.CharField(label="Title for tag",  # help_text="Enter your tag",
+                           max_length=10)
+    slug = forms.SlugField(max_length=31)
+
+    def save(self, instance):
+        instance.name = self.cleaned_data["name"]
+        instance.slug = self.cleaned_data["slug"]
+        instance.save()
+        return instance
+
+
+# class RatingForm(forms.Form):
+#     score = forms.IntegerField(min_value=1, max_value=5, widget=forms.HiddenInput())
+
+
+class RatingForm(forms.Form):
+    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]  # Вибір з 1 до 5
+    score = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.Select, label="Score")
+
 #
 # class ContactForm(forms.Form):
 #     name = forms.CharField(max_length=100, required=True, label='Ваше ім\'я')
