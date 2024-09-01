@@ -187,36 +187,7 @@ def manage_tag(request, pk=None):
     tags = Tag.objects.all()
     return render(request, 'blog/post/edit_tag.html', {'form': form, 'tags': tags})
 
-
-#
-# def manage_tag(request, pk=None):
-#     if pk:
-#         tag = get_object_or_404(Tag, pk=pk)
-#     else:
-#         tag = None
-#
-#     if request.method == "POST":
-#         form = forms.TagForm(request.POST, instance=tag)
-#         if form.is_valid():
-#             tag = form.save(commit=False)
-#             if not pk:  # Only set the slug if it's a new tag
-#                 # tag.slug = tag.name # Uncomment and set slug if necessary
-#                 pass
-#             tag.save()
-#             if pk:
-#                 messages.success(request, f'Tag "{tag.slug}" was updated.')
-#             else:
-#                 messages.success(request, f'Tag "{tag.slug}" was created.')
-#             return HttpResponseRedirect(reverse("blog:manage-tag", args=[tag.pk]))
-#         else:
-#             messages.error(request, 'Please correct the error below.')
-#     else:
-#         form = forms.TagForm(instance=tag)
-#
-#     tags = Tag.objects.all()
-#     return render(request, 'blog/post/edit_tag.html', {'form': form, 'tags': tags})
-
-
+#######################################
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)  # Не забувайте про request.FILES для завантаження файлів
@@ -225,10 +196,11 @@ def create_post(request):
             post.author = request.user  # Встановлюємо автора поста
             post.save()  # Тепер зберігаємо пост
             form.save_m2m()  # Зберігаємо ManyToMany поля, якщо є
-            messages.success(request, f'Post "{post.title}" was created.')
+            messages.success(request, f'Post "{post.title}" was created.', extra_tags='bold')
             return redirect('blog:post_detail', post.id)  # Перенаправлення на деталі поста  #
         else:
             messages.error(request, 'Please correct the error below.')
+            form.add_error(None, "non-errors")
     else:
         form = PostForm()
     return render(request, 'blog/post/create_post.html', {'form': form})
@@ -244,9 +216,12 @@ def edit_post(request, post_id):
             post.save()
             form.save_m2m()
             messages.success(request, f'Post "{post.title}" was updated.')
+            form.send_email(request, msg = f'Post "{post.title}" was updated.')
+
             return redirect('blog:post_detail', post.id)
         else:
             messages.error(request, 'Please correct the error below.')
+            form.add_error(None, "non-errors")
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post/create_post.html', {'form': form, 'post': post})

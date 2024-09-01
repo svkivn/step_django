@@ -1,4 +1,6 @@
 from django import forms
+from django.core.mail import EmailMessage
+
 from .models import Comment, Tag, Post
 from django.core.exceptions import ValidationError
 
@@ -21,9 +23,11 @@ class CommentForm(forms.ModelForm):
         fields = ['name', 'email', 'body']
 
 
+
 class TagForm(forms.ModelForm):
     name = forms.CharField(label='Title for tag', help_text="Enter your tag",
-                           widget=forms.TextInput(attrs={'class': 'form-control', "placeholder": "Enter new tag"}),
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         "placeholder": "Enter new tag"}),
                            # validators=[validate_lowercase]
                            )
 
@@ -44,13 +48,21 @@ class TagForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['image'].required = False
+        self.fields['category'].empty_label = "Оберіть категорію"
+        self.fields['title'].widget.attrs.update({'class': 'form-control'})
+
     class Meta:
         model = Post
         fields = ['title', 'body', 'status', 'tags', 'category', 'image', "publish"]
         widgets = {
-            'body': forms.Textarea(attrs={'rows': 5, 'cols': 40}),
+            'body': forms.Textarea(attrs={'rows': 5, 'cols': 40, 'class': 'form-control'}),
             'image': forms.ClearableFileInput(attrs={'multiple': False}),
             'publish': forms.DateTimeInput(attrs={'type': 'datetime-local'})}
+        labels = {'title': 'Назва публікації', 'body': 'Текст публікації'}
 
     def clean_tags(self):
         tags = self.cleaned_data.get('tags')
@@ -63,3 +75,37 @@ class PostForm(forms.ModelForm):
             raise forms.ValidationError("Можна вибрати не більше 5 тегів.")
 
         return tags
+
+    # валідація на рівні поля форми
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        if len(title) < 5:
+            raise forms.ValidationError("Заголовок повинен містити не менше 5 символів.")
+        return title.title()
+
+    def clean_body(self):
+        content = self.cleaned_data.get('body')
+        if len(content) < 10:
+            raise forms.ValidationError("Зміст повинен містити не менше 10 символів.")
+        return content
+
+    # Загальна валідація на рівні форми
+    def clean(self):
+        cleaned_data = super().clean()
+        title = cleaned_data.get("title")
+        content = cleaned_data.get("body")
+
+        if title and content and title in content:
+            raise forms.ValidationError("Зміст не може містити заголовок.")
+
+    def send_email(self, request, msg):
+        # data = self.cleaned_data
+        msg_body = msg
+        email = EmailMessage(
+            subject='New Post Entry',
+            body=msg_body,
+            from_email='no-reply@example.com',
+                reply_to=['no-reply@example.com'], cc=[], bcc=[], to=['q'], attachments=[], headers={}, )
+        email.content_subtype = 'plain'
+        email.send()
+        print("ok")

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{{ block.super }}
 <h1>My Blog - tags ({{ tags |length }})</h1>  <!--tags.count-->
 
 
@@ -25,7 +26,8 @@
 {% endfor %}
 
 <div class="pb-3">
-    <form class="row justify-content-start" method="post" action="">  <!-- action="{% url 'blog:create-tag' %}" -->
+    <form class="row justify-content-start" method="post" action="">
+        <!-- action="{% url 'blog:create-tag' %}" -->
         {% csrf_token %}
         <div class="col-auto align-self-end">
             {{ form }}
@@ -56,6 +58,8 @@
                 <a href="{% url 'blog:delete-tag' pk=tag.pk %}" class="btn btn-danger btn-sm">Del</a>
             </td>
         </tr>
+        {% empty %}
+        <tr><td>There are currently no Tags available.</td></tr>
         {% endfor %}
         </tbody>
     </table>

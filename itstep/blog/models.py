@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
@@ -36,10 +37,11 @@ class Post(models.Model):
     objects = models.Manager()  # The default manager.
     published = PublishedManager()  # Our custom manager.
 
-    tags = models.ManyToManyField("Tag", related_name='blog_posts')
+    tags = models.ManyToManyField("Tag", related_name='blog_posts', blank=True)
 
     category = models.ForeignKey("Category", on_delete=models.PROTECT, null=True)
-    image = models.ImageField(upload_to='post/images/')
+    image = models.ImageField(upload_to='post/images/',
+                              default="default.png", blank=True)
 
     class Meta:
         ordering = ['-publish']
@@ -53,6 +55,13 @@ class Post(models.Model):
     def save(self, *args, **kwargs):  # < here
         self.slug = slugify(self.title)
         super(Post, self).save(*args, **kwargs)
+
+    def clean(self):
+        # Валідація на рівні моделі
+        if self.title == "":
+            raise ValidationError("Заголовок не може бути порожнім.")
+        if self.body == "":
+            raise ValidationError("Зміст не може бути порожнім.")
 
 
 class Comment(models.Model):
