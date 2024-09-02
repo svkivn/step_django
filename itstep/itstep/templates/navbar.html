@@ -16,6 +16,28 @@
             <li class="nav-item">
                 <a class="nav-link" href="#"> <span class="fa fa-paper-plane mr-3"></span> Сontact</a>
             </li>
+
+            {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary" href="{% url 'account:dashboard' %}">
+                        <span class="fa fa-user mr-3"></span> {{ request.user.first_name|default:request.user.username }}  dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                <form style="display:inline-block " method="post" action="{% url 'account:logout' %}">
+                    {% csrf_token %}
+                    <input type="submit" class="nav-link btn btn-primary" value="Logout" />
+                </form>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary" href="{% url 'account:login' %}"> <span class="fa fa-user mr-3"></span> Login</a>
+                </li>
+            <li class="nav-item">
+                    <a class="nav-link btn btn-primary" href="{% url 'account:register' %}"> <span class="fa fa-plus mr-3"></span> Register</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
+

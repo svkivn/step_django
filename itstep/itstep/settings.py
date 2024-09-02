@@ -28,9 +28,9 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = ["crispy_forms", "crispy_bootstrap4", "debug_toolbar", "django.contrib.admin", "django.contrib.auth",
-    "django.contrib.contenttypes", "django.contrib.sessions", "django.contrib.messages", "django.contrib.staticfiles",
-    "portfolio", 'blog.apps.BlogConfig', 'django_extensions', 'accounts', ]
+INSTALLED_APPS = ['account', "crispy_forms", "crispy_bootstrap4", "debug_toolbar", 'django_extensions',
+    "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions",
+    "django.contrib.messages", "django.contrib.staticfiles", "portfolio", 'blog.apps.BlogConfig', ]
 
 MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware", "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware", "django.middleware.common.CommonMiddleware",
@@ -41,11 +41,12 @@ ROOT_URLCONF = "itstep.urls"
 
 TEMPLATES = [
     {"BACKEND": "django.template.backends.django.DjangoTemplates", "DIRS": [os.path.join(BASE_DIR, "itstep/templates")],
-        # Додаткові директорії
-        "APP_DIRS": True,  # Вказує Django автоматично шукати шаблони в папках app
-        "OPTIONS": {"context_processors": ["django.template.context_processors.debug",
-            "django.template.context_processors.request", "django.contrib.auth.context_processors.auth",
-            "django.contrib.messages.context_processors.messages", ], }, }, ]
+     # Додаткові директорії
+     "APP_DIRS": True,  # Вказує Django автоматично шукати шаблони в папках app
+     "OPTIONS": {"context_processors": ["django.template.context_processors.debug",
+                                        "django.template.context_processors.request",
+                                        "django.contrib.auth.context_processors.auth",
+                                        "django.contrib.messages.context_processors.messages", ], }, }, ]
 
 # https://stackoverflow.com/questions/75495403/django-returns-templatedoesnotexist-when-using-crispy-forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
@@ -62,19 +63,16 @@ DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DI
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [{"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator", },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", }, ]
+                            {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
+                            {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
+                            {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", }, ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -109,9 +107,45 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 INTERNAL_IPS = ["127.0.0.1", ]
 
-LOGGING = {'version': 1, 'filters': {'require_debug_true': {'()': 'django.utils.log.RequireDebugTrue', }},
-    'handlers': {'console': {'level': 'DEBUG', 'filters': ['require_debug_true'], 'class': 'logging.StreamHandler', }},
-    'loggers': {'django.db.backends': {'level': 'DEBUG', 'handlers': ['console'], }}}
+
+
+import os
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],  # Виведення в консоль тільки коли DEBUG=True
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django.log'),  # Логи записуються у файл django.log
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],  # Використовуємо обидва обробники: консоль і файл
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # 'django.db.backends': {
+        #     'level': 'DEBUG',
+        #     'handlers': ['console'],  # SQL-запити виводяться в консоль при DEBUG=True
+        #     'propagate': False,
+        # },
+    },
+}
+
+
 
 import environ
 
@@ -128,3 +162,8 @@ if DEBUG:
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
     EMAIL_USE_SSL = False
+
+
+LOGIN_URL = "account:login"
+LOGIN_REDIRECT_URL = "account:dashboard"
+LOGOUT_REDIRECT_URL = "account:logout"

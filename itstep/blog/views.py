@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
@@ -188,6 +189,7 @@ def manage_tag(request, pk=None):
     return render(request, 'blog/post/edit_tag.html', {'form': form, 'tags': tags})
 
 #######################################
+@login_required
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)  # Не забувайте про request.FILES для завантаження файлів

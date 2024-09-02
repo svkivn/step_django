@@ -105,7 +105,7 @@ class PostForm(forms.ModelForm):
             subject='New Post Entry',
             body=msg_body,
             from_email='no-reply@example.com',
-                reply_to=['no-reply@example.com'], cc=[], bcc=[], to=['q'], attachments=[], headers={}, )
+                reply_to=['no-reply@example.com'], cc=[], bcc=[], to=['voynyliv@ukr.net'], attachments=[], headers={}, )
         email.content_subtype = 'plain'
         email.send()
-        print("ok")
+

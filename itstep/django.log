@@ -1,0 +1,15 @@
+Watching for file changes with StatReloader
+"GET /account/login/ HTTP/1.1" 200 19385
+"POST /account/login/ HTTP/1.1" 302 0
+"GET /account/ HTTP/1.1" 200 18242
+"POST /account/logout/ HTTP/1.1" 200 18162
+C:\Users\admin\PycharmProjects\pythonProjectDjango\itstep\itstep\settings.py changed, reloading.
+Watching for file changes with StatReloader
+"POST /account/logout/ HTTP/1.1" 200 18160
+"GET /account/login/ HTTP/1.1" 200 19384
+"POST /account/login/ HTTP/1.1" 200 19486
+"POST /account/login/ HTTP/1.1" 302 0
+"GET /account/ HTTP/1.1" 200 18242
+"POST /account/logout/ HTTP/1.1" 200 18161
+C:\Users\admin\PycharmProjects\pythonProjectDjango\itstep\account\models.py changed, reloading.
+Watching for file changes with StatReloader
