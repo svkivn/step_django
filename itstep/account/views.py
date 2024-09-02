@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import LoginForm, UserRegistrationForm
+from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
+from .models import Profile
 
 
 def user_login(request):
@@ -52,6 +53,8 @@ def register(request):
             new_user = user_form.save(commit=False)
             new_user.set_password(user_form.cleaned_data['password'])
             new_user.save()
+            # Create the user profile
+            Profile.objects.create(user=new_user)
             messages.success(request, 'Registration successful! You can now log in.')
             return redirect("account:login")
         messages.error(request, 'There was an error with your registration. Please check the form for errors.')
@@ -72,3 +75,20 @@ class CustomLogoutView(LogoutView):
         # Додайте журналізацію
         logger.info(f"User {request.user.username} has logged out.")
         return response
+
+
+@login_required
+def edit(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(data=request.POST, instance=request.user)
+        profile_form = ProfileEditForm(data=request.POST, files=request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, f'Update successful {request.user}!')
+        else:
+            messages.error(request, 'There was an error with update. Please check the form for errors.')
+    else:
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
+    return render(request, 'account/edit.html', {'user_form': user_form, 'profile_form': profile_form})

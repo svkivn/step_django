@@ -24,13 +24,25 @@ SECRET_KEY = "django-insecure-$_62*=c!j1xy4&&+mfznqnn@l48@muzat3f+@mr1$p36j1*twt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mysite.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
-INSTALLED_APPS = ['account', "crispy_forms", "crispy_bootstrap4", "debug_toolbar", 'django_extensions',
-    "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions",
-    "django.contrib.messages", "django.contrib.staticfiles", "portfolio", 'blog.apps.BlogConfig', ]
+INSTALLED_APPS = [
+    'account',
+    "crispy_forms",
+    "crispy_bootstrap4",
+    "debug_toolbar",
+    'django_extensions',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "portfolio",
+    'blog.apps.BlogConfig',
+]
 
 MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware", "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware", "django.middleware.common.CommonMiddleware",
@@ -167,3 +179,10 @@ if DEBUG:
 LOGIN_URL = "account:login"
 LOGIN_REDIRECT_URL = "account:dashboard"
 LOGOUT_REDIRECT_URL = "account:logout"
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'account.authentication.EmailAuthBackend',
+]
+
