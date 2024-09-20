@@ -27,8 +27,18 @@ def user_login(request):
         return render(request, 'account/login.html', {'form': form})
 
 
+
+# Журналізація виходу користувача:
+import logging
+logger = logging.getLogger(__name__)
+
 @login_required
 def dashboard(request):
+    # logger.debug('This is a debug message')
+    # logger.info('This is an info message')
+    # logger.warning('This is a warning message')
+    # logger.error('This is an error message')
+    # logger.critical('This is a critical message')
     return render(request, 'account/dashboard.html', {'section': 'dashboard'})
 
 
@@ -63,9 +73,6 @@ def register(request):
     return render(request, 'account/register.html', {'user_form': user_form})
 
 
-# Журналізація виходу користувача:
-import logging
-logger = logging.getLogger(__name__)
 
 
 class CustomLogoutView(LogoutView):

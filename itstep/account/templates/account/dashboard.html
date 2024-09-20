@@ -13,6 +13,13 @@
     <p>No profile picture available.</p>
 {% endif %}
 
+<p>
+Username: {{ request.user.username }} <br>
+Name: {{ request.user.first_name }} {{
+Date Joined: {{ request.user.date_joined }} <br>
+Email: {{ request.user.email }}<br>
+Last Login: {{ request.user.last_login }}<br>
+</p>
 
 <p>You can <a href="{% url 'account:edit' %}">edit your profile</a></p>
 {% endblock %}

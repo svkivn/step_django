@@ -44,10 +44,16 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
 ]
 
-MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware", "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware", "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware", "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware", "django.middleware.clickjacking.XFrameOptionsMiddleware", ]
+MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
 
 ROOT_URLCONF = "itstep.urls"
 
@@ -126,6 +132,7 @@ import os
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+
     'filters': {
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
@@ -134,21 +141,29 @@ LOGGING = {
     'handlers': {
         'console': {
             'level': 'DEBUG',
-            'filters': ['require_debug_true'],  # Виведення в консоль тільки коли DEBUG=True
+            # 'filters': ['require_debug_true'],  # Виведення в консоль тільки коли DEBUG=True
             'class': 'logging.StreamHandler',
         },
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'django.log'),  # Логи записуються у файл django.log
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],  # Використовуємо обидва обробники: консоль і файл
+            'handlers': ['console', 'file'],                    # Використовуємо обидва обробники: консоль і файл
             'level': 'INFO',
-            'propagate': True,
+            'propagate': False,
         },
+
+        'blog': {
+            # 'blog' Окремий логер для app
+            'handlers': ['console', 'file'],                     # Використовуємо обидва обробники
+            'level': 'INFO',
+            'propagate': False,
+        }
+
         # 'django.db.backends': {
         #     'level': 'DEBUG',
         #     'handlers': ['console'],  # SQL-запити виводяться в консоль при DEBUG=True
@@ -157,7 +172,10 @@ LOGGING = {
     },
 }
 
-
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'account.authentication.EmailAuthBackend',
+]
 
 import environ
 
@@ -181,8 +199,5 @@ LOGIN_REDIRECT_URL = "account:dashboard"
 LOGOUT_REDIRECT_URL = "account:logout"
 
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'account.authentication.EmailAuthBackend',
-]
+
 

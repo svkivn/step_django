@@ -41,10 +41,10 @@ class TagForm(forms.ModelForm):
         value = self.cleaned_data['name']
         return value.lower()
 
-    def clean(self):
-        cleaned_data = super().clean()
-        if len(cleaned_data.get("name")) < 3:
-            self.add_error(None, "The total number of chars  must be 3 or greate.")
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     if len(cleaned_data.get("name")) < 3:
+    #         self.add_error(None, "The total number of chars  must be 3 or greate.")
 
 
 class PostForm(forms.ModelForm):

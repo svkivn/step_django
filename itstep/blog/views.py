@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.urls import reverse
@@ -107,13 +107,14 @@ from . import forms
 
 
 def create_tag(request):
-    if request.method=="POST":
+    if request.method == "POST":
         form = forms.TagForm(request.POST)
         if form.is_valid():
             print(form.cleaned_data)
             tag = form.save(commit=False)
             # tag.slug = tag.name # slugify(test.test_name)
             tag.save()
+            print(f"Tag {tag.slug} was created")
             messages.success(request, f"Tag {tag.slug} was created")
             return HttpResponseRedirect(reverse("blog:create-tag"))
         else:
@@ -191,6 +192,7 @@ def manage_tag(request, pk=None):
 #######################################
 @login_required
 def create_post(request):
+    # print("user",  request.user)
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)  # Не забувайте про request.FILES для завантаження файлів
         if form.is_valid():

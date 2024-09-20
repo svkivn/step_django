@@ -92,9 +92,9 @@ class Tag(models.Model):
         verbose_name = 'tags for posts'
 
     def save(self, *args, **kwargs):
-        print("save to db")
         self.slug = slugify(self.name)
         super(Tag, self).save(*args, **kwargs)
+        print("save to db")
 
 
 class Category(models.Model):
